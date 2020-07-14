@@ -3,7 +3,7 @@ from app.models.cups import Cup
 from app.models.follows import Follow
 from app.models.milestones import Milestone
 from app.models.origins import Origin
-from app.models.roasts import Roasts
+from app.models.roasts import Roast
 from app.models.timestamps import Timestamp
 from app.models.users import User
 
@@ -27,9 +27,15 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
+    origins = ['Columbia', 'Brazil', 'Peru', 'El Salvador', 'Costa Rica', 'Guatemala', 'Burundi', 'Ethiopia', 'Rwanda', 'Congo', 'Sumatra', 'Flores', 'Java', 'Sulawesi', 'Timor', 'Papa New Guinea', 'Yemen']
+    origins.sort()
+
+    origins_list = []
+    for origin in origins:
+        origins_list.append(Origin(name=origin))
 
 
-    for follow in follows:
-        db.session.add(follow)
+    for origin in origins_list:
+        db.session.add(origin)
 
     db.session.commit()

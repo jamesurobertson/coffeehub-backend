@@ -15,7 +15,7 @@ class Comment(db.Model):
                           nullable=False)
 
     roast = db.relationship('Roast',back_populates='comments')
-    user = db.relationship('User', back_populates='cups')
+    user = db.relationship('User', back_populates='comments')
 
     def to_dict(self):
         return {"id": self.id, "userId": self.userId, "roastId": self.roastId}
