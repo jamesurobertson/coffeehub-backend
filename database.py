@@ -21,8 +21,6 @@ fake = Faker()
 # so that the environment variables are
 # properly loaded.
 
-defaultPic = 'https://randomuser.me/api/portraits/'
-
 with app.app_context():
     db.drop_all()
     db.create_all()
@@ -38,4 +36,6 @@ with app.app_context():
     for origin in origins_list:
         db.session.add(origin)
 
+    user = User(email='jamesurobertson@gmail.com', fullName='James Robertson', username='jamesurobertson', password='password', profileImageUrl='https://randomuser.me/api/portraits/', bio='This is my bio. Enjoy my roasts :)')
+    db.session.add(user)
     db.session.commit()

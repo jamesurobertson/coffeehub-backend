@@ -1,8 +1,8 @@
 """initial migrate
 
-Revision ID: e64ecbcf104a
+Revision ID: ed2d731425e5
 Revises: 
-Create Date: 2020-07-14 14:44:15.573619
+Create Date: 2020-07-15 21:14:58.084020
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e64ecbcf104a'
+revision = 'ed2d731425e5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,14 +51,17 @@ def upgrade():
     op.create_table('roasts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('userId', sa.Integer(), nullable=False),
-    sa.Column('originId', sa.Integer(), nullable=False),
-    sa.Column('coffeeSupplier', sa.String(length=100), nullable=False),
-    sa.Column('load', sa.Integer(), nullable=False),
-    sa.Column('yieldNum', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('description', sa.String(length=1000), nullable=True),
+    sa.Column('supplier', sa.String(length=100), nullable=True),
+    sa.Column('originId', sa.Integer(), nullable=True),
+    sa.Column('bean', sa.String(length=50), nullable=True),
+    sa.Column('ambientTemp', sa.Integer(), nullable=True),
+    sa.Column('load', sa.Integer(), nullable=True),
+    sa.Column('yieldNum', sa.Integer(), nullable=True),
     sa.Column('firstCrack', sa.Integer(), nullable=True),
     sa.Column('secondCrack', sa.Integer(), nullable=True),
-    sa.Column('totalTime', sa.Integer(), nullable=False),
-    sa.Column('abientTemp', sa.Integer(), nullable=False),
+    sa.Column('totalTime', sa.Integer(), nullable=True),
     sa.Column('createdAt', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updatedAt', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['originId'], ['origins.id'], ),

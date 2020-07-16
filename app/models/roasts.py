@@ -7,14 +7,17 @@ class Roast(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    originId = db.Column(db.Integer, db.ForeignKey('origins.id'), nullable=False)
-    coffeeSupplier = db.Column(db.String(100), nullable=False)
-    load = db.Column(db.Integer, nullable=False)
-    yieldNum = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(1000))
+    supplier = db.Column(db.String(100))
+    originId = db.Column(db.Integer, db.ForeignKey('origins.id'))
+    bean = db.Column(db.String(50))
+    ambientTemp = db.Column(db.Integer)
+    load = db.Column(db.Integer)
+    yieldNum = db.Column(db.Integer)
     firstCrack = db.Column(db.Integer)
     secondCrack = db.Column(db.Integer)
-    totalTime = db.Column(db.Integer, nullable=False)
-    abientTemp = db.Column(db.Integer, nullable=False)
+    totalTime = db.Column(db.Integer)
     createdAt = db.Column(db.DateTime(timezone=True),
                           server_default=func.now(), nullable=False)
     updatedAt = db.Column(db.DateTime(timezone=True),
@@ -29,6 +32,10 @@ class Roast(db.Model):
     comments = db.relationship('Comment', back_populates='roast')
 
     def to_dict(self):
-        return {"id": self.id, "userId": self.userId, "originId": self.originId, "coffeeSupplier": self.coffeeSupplier,
-                "load": self.load, "yieldNum": self.yieldNum, "firstCrack": self.firstCrack, "secondCrack": self.secondCrack,
-                "totalTime": self.totalTime, "ambientTemp": self.ambientTemp }
+        return {"id": self.id, "userId": self.userId,
+                "name": self.name, "description": self.description,
+                "supplier": self.supplier, "originId": self.originId,
+                "bean": self.bean,"ambientTemp": self.ambientTemp,
+                "load": self.load, "yieldNum": self.yieldNum,
+                "firstCrack": self.firstCrack, "secondCrack": self.secondCrack,
+                "totalTime": self.totalTime, "createdAt": self.createdAt }
