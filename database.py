@@ -26,11 +26,15 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-    user = User(email='jamesurobertson@gmail.com', fullName='James Robertson', username='jamesurobertson',
-                password='password', profileImageUrl='https://randomuser.me/api/portraits/', bio='This is my bio. Enjoy my roasts :)')
+    users = [User(email='jamesurobertson@gmail.com', fullName='James Robertson', username='jamesurobertson',
+             password='password', profileImageUrl='https://randomuser.me/api/portraits/', bio='This is my bio. Enjoy my roasts :)'),
+             User(email='dan1@gmail.com', fullName='Daniel Robertson', username='DanGR',
+             password='password', profileImageUrl='https://randomuser.me/api/portraits/men/2.jpg', bio='This is Dans bio'),
+             User(email='vic@gmail.com', fullName='Vic Robertson', username='vic3',
+             password='password', profileImageUrl='https://randomuser.me/api/portraits/men/3.jpg', bio='This is Vics bio!!!')]
 
     origins = ['Colombia', 'Brazil', 'Peru', 'El Salvador', 'Costa Rica', 'Guatemala', 'Burundi', 'Ethiopia',
-        'Rwanda', 'Congo', 'Sumatra', 'Flores', 'Java', 'Sulawesi', 'Timor', 'Papa New Guinea', 'Yemen']
+               'Rwanda', 'Congo', 'Sumatra', 'Flores', 'Java', 'Sulawesi', 'Timor', 'Papa New Guinea', 'Yemen']
     origins.sort()
     origins_list = []
     for origin in origins:
@@ -75,7 +79,18 @@ with app.app_context():
         Note(roastId=1, note='Drop 1 minute and 30 seconds after First Crack')
     ]
 
-    db.session.add(user)
+    follows = [
+        Follow(userId=1, userFollowedId=2),
+        Follow(userId=1, userFollowedId=3),
+    ]
+
+    cups = [
+        Cup(userId=2, roastId=1),
+        Cup(userId=3, roastId=1)
+    ]
+
+    for user in users:
+        db.session.add(user)
 
     for origin in origins_list:
         db.session.add(origin)
@@ -90,5 +105,11 @@ with app.app_context():
 
     for note in notes:
         db.session.add(note)
+
+    for cup in cups:
+        db.session.add(cup)
+
+    for follow in follows:
+        db.session.add(follow)
 
     db.session.commit()

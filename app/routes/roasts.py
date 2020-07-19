@@ -3,6 +3,7 @@ from ..models import db
 from ..models.roasts import Roast
 from ..models.users import User
 from ..auth import require_auth
+from ..utils import get_list
 
 bp = Blueprint('roasts', __name__, url_prefix='/api/roasts')
 
@@ -65,10 +66,3 @@ def update_roast(id):
 
     db.session.commit()
     return roast.to_dict()
-
-
-def get_list(query_nodes):
-    dict_list = []
-    for query in query_nodes:
-        dict_list.append(query.to_dict())
-    return dict_list
