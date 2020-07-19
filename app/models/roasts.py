@@ -12,12 +12,12 @@ class Roast(db.Model):
     supplier = db.Column(db.String(100))
     originId = db.Column(db.Integer, db.ForeignKey('origins.id'))
     bean = db.Column(db.String(50))
-    ambientTemp = db.Column(db.Integer)
-    load = db.Column(db.Integer)
-    yieldNum = db.Column(db.Integer)
-    firstCrack = db.Column(db.Integer)
-    secondCrack = db.Column(db.Integer)
-    totalTime = db.Column(db.Integer)
+    ambientTemp = db.Column(db.Float)
+    load = db.Column(db.Float)
+    yieldNum = db.Column(db.Float)
+    firstCrack = db.Column(db.String)
+    secondCrack = db.Column(db.String)
+    totalTime = db.Column(db.String(10))
     createdAt = db.Column(db.DateTime(timezone=True),
                           server_default=func.now(), nullable=False)
     updatedAt = db.Column(db.DateTime(timezone=True),
@@ -27,6 +27,7 @@ class Roast(db.Model):
     origin = db.relationship('Origin', back_populates='roasts')
     user = db.relationship('User', back_populates='roasts')
     milestones = db.relationship('Milestone', back_populates='roast')
+    notes = db.relationship('Note', back_populates='roast')
     timestamps = db.relationship('Timestamp', back_populates='roast')
     cups = db.relationship('Cup', back_populates='roast')
     comments = db.relationship('Comment', back_populates='roast')
@@ -35,7 +36,7 @@ class Roast(db.Model):
         return {"id": self.id, "userId": self.userId,
                 "name": self.name, "description": self.description,
                 "supplier": self.supplier, "originId": self.originId,
-                "bean": self.bean,"ambientTemp": self.ambientTemp,
+                "bean": self.bean, "ambientTemp": self.ambientTemp,
                 "load": self.load, "yieldNum": self.yieldNum,
                 "firstCrack": self.firstCrack, "secondCrack": self.secondCrack,
-                "totalTime": self.totalTime, "createdAt": self.createdAt }
+                "totalTime": self.totalTime, "createdAt": self.createdAt}
