@@ -38,9 +38,9 @@ def getRoasts(id):
         for follow in f_user_follows:
             followed_user = User.query.filter(User.id == follow.userFollowedId).first()
             followed_user_dict = followed_user.to_dict()
-            num_cups = len(followed_user.cups)
+            num_roasts = len(followed_user.roasts)
             num_followers = Follow.query.filter(Follow.userFollowedId == followed_user.id).count()
-            followed_user_dict["numCups"] = num_cups
+            followed_user_dict["numRoasts"] = num_roasts
             followed_user_dict["numFollowers"] = num_followers
             f_user_followed_users.append(followed_user_dict)
         user_obj['followed_users'] = f_user_followed_users

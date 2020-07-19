@@ -40,7 +40,7 @@ with app.app_context():
     for origin in origins:
         origins_list.append(Origin(name=origin))
 
-    roast = Roast(userId=1, name='first-roast', description='The firt roast on the site!', supplier='Sweet Marias', originId='1',
+    roast = Roast(userId=1, name='first-roast', description='The first roast on the site!', supplier='Sweet Marias', originId='1',
                   bean='Dipilto Finca La Laguna', ambientTemp=74, load=222, yieldNum=198, firstCrack='8:33', totalTime='10:03')
 
     timestamps = [
@@ -76,6 +76,7 @@ with app.app_context():
     ]
 
     notes = [
+        Note(roastId=1, note='Charge at 380 degrees. Enery and Fan off for 1 minute and then Energy 100% until 320 degrees'),
         Note(roastId=1, note='Drop 1 minute and 30 seconds after First Crack')
     ]
 
