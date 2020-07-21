@@ -1,5 +1,6 @@
 from ..models import db
 from sqlalchemy import func
+from ..utils import get_list
 
 
 class Roast(db.Model):
@@ -35,8 +36,10 @@ class Roast(db.Model):
     def to_dict(self):
         return {"id": self.id, "userId": self.userId,
                 "name": self.name, "description": self.description,
-                "supplier": self.supplier, "originId": self.originId,
-                "bean": self.bean, "ambientTemp": self.ambientTemp,
+                "supplier": self.supplier,"bean": self.bean,
+                "ambientTemp": self.ambientTemp,
                 "load": self.load, "yieldNum": self.yieldNum,
                 "firstCrack": self.firstCrack, "secondCrack": self.secondCrack,
-                "totalTime": self.totalTime, "createdAt": self.createdAt}
+                "totalTime": self.totalTime, "createdAt": self.createdAt,
+                "origin": self.origin.to_dict(), "cups": get_list(self.cups),
+                "roastUser": self.user.to_dict()}

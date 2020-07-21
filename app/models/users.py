@@ -2,6 +2,7 @@ from ..models import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import func
 from sqlalchemy.orm import validates
+from ..utils import get_list
 
 
 class User(db.Model):
@@ -54,5 +55,5 @@ class User(db.Model):
 
     def to_dict(self):
         return {"id": self.id, "email": self.email, "fullName": self.fullName, "username": self.username,
-                "profileImageUrl": self.profileImageUrl,
-                "bio": self.bio}
+                "profileImageUrl": self.profileImageUrl, "following": get_list(self.follows),
+                "bio": self.bio, "cups": get_list(self.cups)}

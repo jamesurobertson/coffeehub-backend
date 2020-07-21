@@ -3,6 +3,7 @@ from ..models import db
 from ..models.follows import Follow
 from ..models.cups import Cup
 from ..models.users import User
+from ..models.follows import Follow
 from ..auth import require_auth
 from ..utils import get_list
 from ..utils import merge
@@ -50,4 +51,13 @@ def getRoasts(id):
     return {'feed': feed}
 
 
-# {'id': 2, 'userId': 1, 'userFollowedId': 3}
+@bp.route('/<username>')
+@require_auth
+def getProfiledata(username):
+    user = User.query.filter(User.username == username).first()
+    user_dict = user.to_dict()
+    roasts = get_list(user.roasts)
+    user_dict["roasts"] = roasts
+    followers = Follow.query.filter(Follow.userFollowedId == user.id).all()
+    user_dict["followers"] = get_list(followers)
+    return {"user": user_dict}

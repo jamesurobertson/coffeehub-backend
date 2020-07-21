@@ -1,6 +1,6 @@
 from ..models import db
 from sqlalchemy import func
-
+from ..models.users import User
 
 class Follow(db.Model):
     __tablename__ = 'follows'
@@ -16,5 +16,9 @@ class Follow(db.Model):
 
     user = db.relationship('User', back_populates='follows')
 
+    def userFollowed(self):
+        return User.query.filter(User.id == self.userFollowedId).first().to_dict()
+
     def to_dict(self):
-        return {"id": self.id, "userId": self.userId, "userFollowedId": self.userFollowedId}
+        return {"id": self.id, "userId": self.userId, "userFollowed": self.userFollowed(),
+                "userFollowedId": self.userFollowedId}
