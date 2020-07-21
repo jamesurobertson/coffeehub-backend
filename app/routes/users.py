@@ -59,5 +59,6 @@ def getProfiledata(username):
     roasts = get_list(user.roasts)
     user_dict["roasts"] = roasts
     followers = Follow.query.filter(Follow.userFollowedId == user.id).all()
+    user_dict["following"] = get_list(user.follows)
     user_dict["followers"] = get_list(followers)
     return {"user": user_dict}

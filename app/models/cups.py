@@ -14,7 +14,7 @@ class Cup(db.Model):
                           server_default=func.now(), onupdate=func.now(),
                           nullable=False)
 
-    user = db.relationship('User',back_populates='cups')
+    user = db.relationship('User', back_populates='cups')
     roast = db.relationship('Roast', back_populates='cups')
 
     def to_dict(self):

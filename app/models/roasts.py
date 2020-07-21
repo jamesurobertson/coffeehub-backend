@@ -36,10 +36,10 @@ class Roast(db.Model):
     def to_dict(self):
         return {"id": self.id, "userId": self.userId,
                 "name": self.name, "description": self.description,
-                "supplier": self.supplier,"bean": self.bean,
+                "supplier": self.supplier, "bean": self.bean,
                 "ambientTemp": self.ambientTemp,
                 "load": self.load, "yieldNum": self.yieldNum,
                 "firstCrack": self.firstCrack, "secondCrack": self.secondCrack,
                 "totalTime": self.totalTime, "createdAt": self.createdAt,
-                "origin": self.origin.to_dict(), "cups": get_list(self.cups),
+                "origin": self.origin.to_dict() if self.origin else '', "cups": get_list(self.cups) if self.cups else '',
                 "roastUser": self.user.to_dict()}
