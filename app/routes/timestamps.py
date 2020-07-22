@@ -12,7 +12,6 @@ bp = Blueprint('timestamps', __name__, url_prefix='/api/timestamps')
 @require_auth
 def post_timestamps(id):
     data = request.json
-    print(data)
     timestamp = Timestamp(
         roastId=id, roastTemp=data["roastTemp"], timestamp=data["timestamp"])
     db.session.add(timestamp)

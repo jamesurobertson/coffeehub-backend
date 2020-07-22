@@ -11,10 +11,9 @@ from ..utils import merge
 bp = Blueprint('users', __name__, url_prefix='/api/users')
 
 
-@bp.route('/<id>/feed')
+@bp.route('/feed')
 @require_auth
-def getRoasts(id):
-    user = User.query.filter(User.id == id).first()
+def getRoasts(user):
     followed_users = user.follows
     feed = []
     cups = []
@@ -53,7 +52,7 @@ def getRoasts(id):
 
 @bp.route('/<username>')
 @require_auth
-def getProfiledata(username):
+def getProfiledata(username, user):
     user = User.query.filter(User.username == username).first()
     user_dict = user.to_dict()
     roasts = get_list(user.roasts)
@@ -62,3 +61,17 @@ def getProfiledata(username):
     user_dict["following"] = get_list(user.follows)
     user_dict["followers"] = get_list(followers)
     return {"user": user_dict}
+
+@bp.route('/follow/<username>', methods=['POST', 'DELETE'])
+@require_auth
+def follow(username, user):
+    user_followed = User.query.filter(User.username == username).first()
+    if request.method == 'POST':
+        follow = Follow(userId=user.id, userFollowedId=user_followed.id)
+        db.session.add(follow)
+    else:
+        follow = Follow.query.filter(Follow.userId == user.id).filter(Follow.userFollowedId == user_followed.id).first()
+        db.session.delete(follow)
+
+    db.session.commit()
+    return follow.to_dict()

@@ -18,5 +18,5 @@ def require_auth(func):
                 User.email == decoded.get('email')).first()
         except:
             return {'error': 'invalid auth token'}, 401
-        return func(*args, **kwargs)
+        return func(*args, user=user, **kwargs)
     return wrapped

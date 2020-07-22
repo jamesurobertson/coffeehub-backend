@@ -16,9 +16,6 @@ class Follow(db.Model):
 
     user = db.relationship('User', back_populates='follows')
 
-    def userFollowed(self):
-        return User.query.filter(User.id == self.userFollowedId).first().to_dict()
-
     def to_dict(self):
-        return {"id": self.id, "userId": self.userId, "userFollowed": self.userFollowed(),
+        return {"id": self.id, "userId": self.userId,
                 "userFollowedId": self.userFollowedId}

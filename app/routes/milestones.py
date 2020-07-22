@@ -8,7 +8,7 @@ bp = Blueprint('milestones', __name__, url_prefix='/api/milestones')
 
 @bp.route('/<id>', methods=["POST"])
 @require_auth
-def post_milestone(id):
+def post_milestone(id, user):
     data = request.json
     milestone = Milestone(roastId=id, timestamp=data["timestamp"], fanspeed=data["fanSpeed"], heatLevel=data["heatLevel"])
     db.session.add(milestone)

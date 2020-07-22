@@ -2,22 +2,24 @@ from flask import Blueprint, request
 from ..models import db
 from ..models.roasts import Roast
 from ..models.users import User
+from ..models.cups import Cup
 from ..auth import require_auth
 from ..utils import get_list
 
 bp = Blueprint('roasts', __name__, url_prefix='/api/roasts')
 
 
-@bp.route('/user/<id>')
+@bp.route('')
 @require_auth
-def getRoasts(id):
-    roasts = Roast.query.filter(Roast.userId == id).all()
+def getRoasts(user):
+    print(f'user: {user}')
+    roasts = Roast.query.filter(Roast.userId == user.id).all()
     roasts_list = get_list(roasts)
     return {"roasts_list": roasts_list}
 
 @bp.route('/<username>/<roastName>')
 @require_auth
-def get_roast(username, roastName):
+def get_roast(username, roastName, user):
     user = User.query.filter(User.username == username).first()
     roast = Roast.query.filter(Roast.userId == user.id).filter(Roast.name == roastName).first()
     roast_obj = roast.to_dict()
@@ -28,20 +30,32 @@ def get_roast(username, roastName):
     return roast_obj
 
 
-@bp.route('<id>', methods=['POST'])
+@bp.route('', methods=['POST', 'DELETE'])
 @require_auth
-def post_roast(id):
+def post_roast(user):
     data = request.json
     print(data)
-    roast = Roast(userId=id, name=data["name"], description=data["description"])
-    db.session.add(roast)
+    if request.method == 'POST':
+        roast = Roast(userId=user.id, name=data["name"], description=data["description"])
+        db.session.add(roast)
+    else:
+        roast = Roast.query.filter(Roast.id == data["roastId"]).first()
+        if roast.userId != user.id:
+            return "Can not delete roasts that you did not create", 404
+
+        nodes = roast.notes + roast.milestones + roast.timestamps + roast.cups + roast.comments
+        for node in nodes:
+            db.session.delete(node)
+
+        db.session.delete(roast)
+
     db.session.commit()
     return roast.to_dict()
 
 
 @bp.route('<id>', methods=['PUT'])
 @require_auth
-def update_roast(id):
+def update_roast(id, user):
     data = request.json
     roast = Roast.query.filter(Roast.id == id).first()
     values = ["supplier", "bean", "load", "ambientTemp",
@@ -66,3 +80,16 @@ def update_roast(id):
 
     db.session.commit()
     return roast.to_dict()
+
+@bp.route('/cup/<id>', methods=["POST", "DELETE"])
+@require_auth
+def cup(id, user):
+    if request.method == 'POST':
+        cup = Cup(userId=user.id, roastId=id)
+        db.session.add(cup)
+    else:
+        cup = Cup.query.filter(Cup.userId == user.id).filter(Cup.roastId == id).first()
+        db.session.delete(cup)
+
+    db.session.commit()
+    return cup.to_dict()
