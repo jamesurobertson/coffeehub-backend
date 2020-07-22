@@ -11,6 +11,11 @@ from ..utils import merge
 bp = Blueprint('users', __name__, url_prefix='/api/users')
 
 
+@bp.route('')
+@require_auth
+def get_user(user):
+    return user.to_dict()
+
 @bp.route('/feed')
 @require_auth
 def getRoasts(user):
