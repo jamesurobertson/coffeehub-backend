@@ -80,3 +80,33 @@ def follow(username, user):
 
     db.session.commit()
     return follow.to_dict()
+
+@bp.route('/validate/<username>')
+@require_auth
+def validate(user, username):
+    if user.username == username:
+        return 'true'
+
+    user = User.query.filter(User.username == username).first()
+    if user:
+        return 'false'
+    else:
+        return 'true'
+
+
+@bp.route('/update', methods=["PUT"])
+@require_auth
+def update_user(user):
+    data = request.json
+
+    if "email" in data and data["email"] != user.email:
+        user.email = data["email"]
+    if "fullName" in data:
+        user.fullName = data["fullName"]
+    if "username" in data and data["username"] != user.username:
+        user.username = data["username"]
+    if "bio" in data:
+        user.bio = data["bio"]
+
+    db.session.commit()
+    return user.to_dict()
