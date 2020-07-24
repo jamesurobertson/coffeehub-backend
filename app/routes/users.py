@@ -98,7 +98,6 @@ def validate(user, username):
 @require_auth
 def update_user(user):
     data = request.json
-
     if "email" in data and data["email"] != user.email:
         user.email = data["email"]
     if "fullName" in data:
@@ -107,6 +106,7 @@ def update_user(user):
         user.username = data["username"]
     if "bio" in data:
         user.bio = data["bio"]
+
 
     db.session.commit()
     return user.to_dict()

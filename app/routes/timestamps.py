@@ -10,7 +10,7 @@ bp = Blueprint('timestamps', __name__, url_prefix='/api/timestamps')
 
 @bp.route('/<id>', methods=["POST"])
 @require_auth
-def post_timestamps(id):
+def post_timestamps(id, user):
     data = request.json
     timestamp = Timestamp(
         roastId=id, roastTemp=data["roastTemp"], timestamp=data["timestamp"])
