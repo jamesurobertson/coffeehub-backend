@@ -11,9 +11,17 @@ bp = Blueprint('roasts', __name__, url_prefix='/api/roasts')
 
 @bp.route('')
 @require_auth
-def getRoasts(user):
+def get_roasts(user):
     print(f'user: {user}')
     roasts = Roast.query.filter(Roast.userId == user.id).all()
+    roasts_list = get_list(roasts)
+    return {"roasts_list": roasts_list}
+
+@bp.route('/initial')
+@require_auth
+def get6(user):
+    print(f'user: {user}')
+    roasts = Roast.query.filter(Roast.userId == user.id).limit(6)
     roasts_list = get_list(roasts)
     return {"roasts_list": roasts_list}
 
@@ -93,3 +101,16 @@ def cup(id, user):
 
     db.session.commit()
     return cup.to_dict()
+
+
+@bp.route('/validate/<roast_name>')
+@require_auth
+def validate_roast_name(user, roast_name):
+    print(roast_name)
+    roast = Roast.query.filter(Roast.userId == user.id).filter(Roast.name == roast_name).first()
+    print(roast)
+
+    if roast:
+        return 'false'
+    else:
+        return 'true'
