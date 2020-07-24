@@ -4,7 +4,7 @@ from flask_cors import CORS
 from app.config import Configuration
 from app.models import db
 
-from app.routes import users, aws, roasts, notes, session, timestamps, milestones
+from app.routes import users, explore, aws, roasts, notes, session, timestamps, milestones
 
 app = Flask(__name__)
 CORS(app)
@@ -19,3 +19,4 @@ app.register_blueprint(milestones.bp)
 app.register_blueprint(notes.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(aws.bp)
+app.register_blueprint(explore.bp)
