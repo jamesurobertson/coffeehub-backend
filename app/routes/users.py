@@ -49,6 +49,7 @@ def getRoasts(user):
             num_followers = Follow.query.filter(Follow.userFollowedId == followed_user.id).count()
             followed_user_dict["numRoasts"] = num_roasts
             followed_user_dict["numFollowers"] = num_followers
+            followed_user_dict["followTime"] = follow.to_dict()["createdAt"]
             f_user_followed_users.append(followed_user_dict)
         user_obj['followed_users'] = f_user_followed_users
         feed.append(user_obj)
