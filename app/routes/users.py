@@ -29,11 +29,13 @@ def getRoasts(user):
         f_user_cupped_roasts = []
         for cup in f_user_cups:
             roast_dict = cup.roast.to_dict()
+            cup_time = cup.to_dict()["createdAt"]
             roast_origin = cup.roast.origin.to_dict()
             roast_likes = len(cup.roast.cups)
             roast_dict["user"] = cup.roast.user.to_dict()
             roast_dict["origin"] = roast_origin
             roast_dict["numLikes"] = roast_likes
+            roast_dict["cupTime"] = cup_time
 
             f_user_cupped_roasts.append(roast_dict)
         user_obj['cupped_roasts'] = f_user_cupped_roasts

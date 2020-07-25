@@ -18,4 +18,4 @@ class Cup(db.Model):
     roast = db.relationship('Roast', back_populates='cups')
 
     def to_dict(self):
-        return {"id": self.id, "userId": self.userId, "roastId": self.roastId}
+        return {"id": self.id, "userId": self.userId, "roastId": self.roastId, "createdAt": self.createdAt}
