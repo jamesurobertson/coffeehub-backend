@@ -30,7 +30,7 @@ def getRoasts(user):
         for cup in f_user_cups:
             roast_dict = cup.roast.to_dict()
             cup_time = cup.to_dict()["createdAt"]
-            roast_origin = cup.roast.origin.to_dict()
+            roast_origin = cup.roast.origin.to_dict() if cup.roast.origin else []
             roast_likes = len(cup.roast.cups)
             roast_dict["user"] = cup.roast.user.to_dict()
             roast_dict["origin"] = roast_origin
