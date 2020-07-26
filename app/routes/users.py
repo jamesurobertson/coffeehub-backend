@@ -1,4 +1,6 @@
 from flask import Blueprint, request
+import jwt
+from ..config import Configuration
 from ..models import db
 from ..models.follows import Follow
 from ..models.cups import Cup
@@ -110,6 +112,6 @@ def update_user(user):
     if "bio" in data:
         user.bio = data["bio"]
 
-
     db.session.commit()
-    return user.to_dict()
+    access_token = jwt.encode({'email': user.email}, Configuration.SECRET_KEY)
+    return {'token': access_token.decode('UTF-8'), 'user': user.to_dict()}
