@@ -4,6 +4,7 @@ from ..models import db
 from ..models.roasts import Roast
 from ..models.users import User
 from ..models.origins import Origin
+from ..models.follows import Follow
 from ..auth import require_auth
 from ..utils import get_list
 
@@ -30,10 +31,18 @@ def get_all(user, search_type, search_param):
         return {"list": get_list(roasts), "type": 'roast'}
     if search_type == 'user':
         users = User.query.filter(or_(User.username.ilike(f'%{search_param}%'), User.fullName.ilike(f'%{search_param}%'))).all()
+        users_list = []
+        for user in users:
+            followers = Follow.query.filter(Follow.userFollowedId == user.id).count()
+            roasts = len(user.roasts)
+            user_dict = user.to_dict()
+            user_dict["numRoasts"] = roasts
+            user_dict["numFollowers"] = followers
+            users_list.append(user_dict)
         # num followers
         # num roasts
 
-        return {"list": get_list(users), "type": 'user'}
+        return {"list": users_list, "type": 'user'}
     if search_type == 'origin':
         origins = Origin.query.filter(Origin.name.ilike(f'%{search_param}%')).all()
         roasts = []
