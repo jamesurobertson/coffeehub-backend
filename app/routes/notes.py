@@ -10,7 +10,11 @@ bp = Blueprint('notes', __name__, url_prefix='/api/notes')
 @require_auth
 def post_note(id, user):
     data = request.json
-    note = Note(roastId=id, timestamp=data["timestamp"], note=data["note"])
+    print(data)
+    if "timestamp" in data:
+        note = Note(roastId=id, note=data["note"], timestamp=data["timestamp"])
+    else:
+        note = Note(roastId=id, note=data["note"])
     db.session.add(note)
     db.session.commit()
     return note.to_dict()
