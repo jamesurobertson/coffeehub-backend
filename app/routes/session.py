@@ -31,7 +31,9 @@ def signup():
     data = request.json
     print(data)
     user = User(email=data["email"], username=data["username"],
-                fullName=data["fullName"], password=data["password"])
+                fullName=data["fullName"], password=data["password"],
+                profileImageUrl='https://slickpics.s3.us-east-2.amazonaws.com/uploads/FriJul312214242020.png'
+                )
     db.session.add(user)
     db.session.commit()
     access_token = jwt.encode({'email': user.email}, Configuration.SECRET_KEY)
