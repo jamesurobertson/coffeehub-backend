@@ -17,6 +17,7 @@ def get_roasts(user):
     roasts_list = get_list(roasts)
     return {"roasts_list": roasts_list}
 
+
 @bp.route('/initial')
 @require_auth
 def get6(user):
@@ -24,6 +25,7 @@ def get6(user):
     roasts = Roast.query.filter(Roast.userId == user.id).limit(6)
     roasts_list = get_list(roasts)
     return {"roasts_list": roasts_list}
+
 
 @bp.route('/<username>/<roastName>')
 @require_auth
@@ -44,7 +46,8 @@ def post_roast(user):
     data = request.json
     print(data)
     if request.method == 'POST':
-        roast = Roast(userId=user.id, name=data["name"], description=data["description"])
+        roast = Roast(userId=user.id, name=data["name"],
+                      description=data["description"])
         db.session.add(roast)
     else:
         roast = Roast.query.filter(Roast.id == data["roastId"]).first()
@@ -66,8 +69,6 @@ def post_roast(user):
 def update_roast(id, user):
     data = request.json
     roast = Roast.query.filter(Roast.id == id).first()
-    values = ["supplier", "bean", "load", "ambientTemp",
-              "originId", "firstCrack", "secondCrack", "totalTime"]
 
     if "supplier" in data:
         roast.supplier = data["supplier"]
@@ -88,6 +89,7 @@ def update_roast(id, user):
 
     db.session.commit()
     return roast.to_dict()
+
 
 @bp.route('/cup/<id>', methods=["POST", "DELETE"])
 @require_auth

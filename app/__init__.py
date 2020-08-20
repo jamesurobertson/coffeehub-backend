@@ -5,7 +5,8 @@ from flask_cors import CORS
 from app.config import Configuration
 from app.models import db
 
-from app.routes import users, explore, aws, roasts, notes, session, timestamps, milestones
+from app.routes import (users, explore, aws, roasts,
+                        notes, session, timestamps, milestones)
 
 
 if os.environ.get("FLASK_ENV") == 'production':
@@ -34,12 +35,9 @@ app.register_blueprint(explore.bp)
 def catch_all(path):
     print(f'caught_path: {path}')
     path_dir = os.path.abspath("./client/build")  # path react build
-    # If we make a request to /static/<some-file-path> for a directory that exists in
-    # our static build folder, serve that file
-    # This could be useful if we have images, audio, etc., that we want to have
-    # available as static resources
-    if path and (os.path.exists(f'./client/build/static/{path}') or os.path.exists(f'./client/build/{path}')):
+
+    if path and (os.path.exists(f'./client/build/static/{path}') or
+                 os.path.exists(f'./client/build/{path}')):
         return send_from_directory(os.path.join(path_dir), path)
-    # Otherwise, serve up the index.html. Our React router will handle any other routes
     else:
         return send_from_directory(os.path.join(path_dir), 'index.html')

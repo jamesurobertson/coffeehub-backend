@@ -1,6 +1,6 @@
 from ..models import db
 from sqlalchemy import func
-from ..models.users import User
+
 
 class Follow(db.Model):
     __tablename__ = 'follows'

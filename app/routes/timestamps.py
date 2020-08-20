@@ -1,7 +1,5 @@
 from flask import Blueprint, request
 from ..models import db
-from ..models.roasts import Roast
-from ..models.users import User
 from ..models.timestamps import Timestamp
 from ..auth import require_auth
 

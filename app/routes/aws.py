@@ -3,13 +3,13 @@ import boto3
 import time
 from flask import Blueprint, request
 from ..models import db
-from ..models.users import User
 from ..auth import require_auth
 
 bp = Blueprint("aws", __name__, url_prefix="/api/aws")
 
 UPLOAD_FOLDER = 'uploads'
 BUCKET = 'slickpics'
+BUCKET_URL = 'https://slickpics.s3.us-east-2.amazonaws.com/uploads/'
 
 
 @bp.route('/upload', methods=["POST"])
@@ -19,10 +19,9 @@ def upload(user):
     f.filename = change_name(f.filename)
     f.save(os.path.join(UPLOAD_FOLDER, f.filename))
     upload_file(f"uploads/{f.filename}", BUCKET)
-    user.profileImageUrl = f'https://slickpics.s3.us-east-2.amazonaws.com/uploads/{f.filename}'
+    user.profileImageUrl = f'{BUCKET_URL}{f.filename}'
     db.session.commit()
-    return {"img": f'https://slickpics.s3.us-east-2.amazonaws.com/uploads/{f.filename}'}
-
+    return {"img": f'{BUCKET_URL}{f.filename}'}
 
 
 def upload_file(file_name, bucket):

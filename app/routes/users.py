@@ -3,12 +3,9 @@ import jwt
 from ..config import Configuration
 from ..models import db
 from ..models.follows import Follow
-from ..models.cups import Cup
 from ..models.users import User
-from ..models.follows import Follow
 from ..auth import require_auth
 from ..utils import get_list
-from ..utils import merge
 
 bp = Blueprint('users', __name__, url_prefix='/api/users')
 
@@ -18,12 +15,12 @@ bp = Blueprint('users', __name__, url_prefix='/api/users')
 def get_user(user):
     return user.to_dict()
 
+
 @bp.route('/feed')
 @require_auth
 def getRoasts(user):
     followed_users = user.follows
     feed = []
-    cups = []
     for followed in followed_users:
         f_user = User.query.filter(User.id == followed.userFollowedId).first()
         user_obj = f_user.to_dict()
@@ -45,17 +42,18 @@ def getRoasts(user):
         f_user_follows = f_user.follows
         f_user_followed_users = []
         for follow in f_user_follows:
-            followed_user = User.query.filter(User.id == follow.userFollowedId).first()
+            followed_user = User.query.filter(
+                User.id == follow.userFollowedId).first()
             followed_user_dict = followed_user.to_dict()
             num_roasts = len(followed_user.roasts)
-            num_followers = Follow.query.filter(Follow.userFollowedId == followed_user.id).count()
+            num_followers = Follow.query.filter(
+                Follow.userFollowedId == followed_user.id).count()
             followed_user_dict["numRoasts"] = num_roasts
             followed_user_dict["numFollowers"] = num_followers
             followed_user_dict["followTime"] = follow.to_dict()["createdAt"]
             f_user_followed_users.append(followed_user_dict)
         user_obj['followed_users'] = f_user_followed_users
         feed.append(user_obj)
-
 
     return {'feed': feed}
 
@@ -72,6 +70,7 @@ def getProfiledata(username, user):
     user_dict["followers"] = get_list(followers)
     return {"user": user_dict}
 
+
 @bp.route('/follow/<username>', methods=['POST', 'DELETE'])
 @require_auth
 def follow(username, user):
@@ -80,11 +79,13 @@ def follow(username, user):
         follow = Follow(userId=user.id, userFollowedId=user_followed.id)
         db.session.add(follow)
     else:
-        follow = Follow.query.filter(Follow.userId == user.id).filter(Follow.userFollowedId == user_followed.id).first()
+        follow = Follow.query.filter(Follow.userId == user.id).filter(
+            Follow.userFollowedId == user_followed.id).first()
         db.session.delete(follow)
 
     db.session.commit()
     return follow.to_dict()
+
 
 @bp.route('/validate/<username>')
 @require_auth

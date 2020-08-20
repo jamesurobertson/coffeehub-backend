@@ -10,10 +10,10 @@ class Timestamp(db.Model):
     roastTemp = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.Float, nullable=False)
     createdAt = db.Column(db.DateTime(timezone=True),
-                           server_default=func.now(), nullable=False)
+                          server_default=func.now(), nullable=False)
     updatedAt = db.Column(db.DateTime(timezone=True),
-                           server_default=func.now(), onupdate=func.now(),
-                           nullable=False)
+                          server_default=func.now(), onupdate=func.now(),
+                          nullable=False)
 
     roast = db.relationship('Roast', back_populates='timestamps')
 
